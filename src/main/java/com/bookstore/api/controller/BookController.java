@@ -60,6 +60,13 @@ public class BookController {
         return ResponseEntity.status(200).body(new BookResponseDTO(book));
     }
 
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<BookResponseDTO> activateBook(@PathVariable Long id){
+        Book book = this.bookService.activateBook(id);
+
+        return ResponseEntity.status(200).body(new BookResponseDTO(book));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id){
         this.bookService.deleteBook(id);

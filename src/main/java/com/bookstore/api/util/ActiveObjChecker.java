@@ -8,4 +8,10 @@ public class ActiveObjChecker {
             throw ex;
         }
     }
+
+    public static void isDeactive(Boolean active, RuntimeException ex){
+        if (active == true) {
+            throw ex;
+        }
+    }
 }

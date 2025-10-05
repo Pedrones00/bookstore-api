@@ -12,6 +12,7 @@ import com.bookstore.api.dto.bookDTO.BookCreateDTO;
 import com.bookstore.api.dto.bookDTO.BookUpdateDTO;
 import com.bookstore.api.exception.authorException.AuthorAlreadyDeactivated;
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
+import com.bookstore.api.exception.bookException.BookAlreadyActivated;
 import com.bookstore.api.exception.bookException.BookAlreadyDeactivated;
 import com.bookstore.api.exception.bookException.BookNotFoundException;
 import com.bookstore.api.model.Author;
@@ -91,6 +92,18 @@ public class BookService {
             book.getAuthors().clear();
             book.getAuthors().addAll(authors);
         }
+
+        return this.bookRepository.save(book);
+    }
+
+    public Book activateBook(Long id) {
+        Optional<Book> optionalBook = this.bookRepository.findById(id);
+        Book book = optionalBook.orElseThrow(() -> new BookNotFoundException(id));
+
+        ActiveObjChecker.isDeactive(book.getActive(), new BookAlreadyActivated(id));
+        book.getAuthors().forEach(author -> ActiveObjChecker.isActive(author.getActive(), new AuthorAlreadyDeactivated(author.getId())));
+        
+        book.setActive(true);
 
         return this.bookRepository.save(book);
     }

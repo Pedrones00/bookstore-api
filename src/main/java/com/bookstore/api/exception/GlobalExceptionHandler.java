@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.bookstore.api.exception.authorException.AuthorAlreadyActivated;
 import com.bookstore.api.exception.authorException.AuthorAlreadyDeactivated;
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
+import com.bookstore.api.exception.bookException.BookAlreadyActivated;
 import com.bookstore.api.exception.bookException.BookAlreadyDeactivated;
 import com.bookstore.api.exception.bookException.BookNotFoundException;
 
@@ -91,5 +93,25 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
         error.put("status", "405");
         return ResponseEntity.status(405).body(error);
+    }
+
+    @ExceptionHandler({AuthorAlreadyActivated.class})
+    public ResponseEntity<Map<String, String>> handlerNotFound(AuthorAlreadyActivated ex){
+        
+        Map<String, String> error = new HashMap<>();
+
+        error.put("message", ex.getMessage());
+        error.put("status", "404");
+        return ResponseEntity.status(404).body(error);
+    }
+
+    @ExceptionHandler({BookAlreadyActivated.class})
+    public ResponseEntity<Map<String, String>> handlerNotFound(BookAlreadyActivated ex){
+        
+        Map<String, String> error = new HashMap<>();
+
+        error.put("message", ex.getMessage());
+        error.put("status", "404");
+        return ResponseEntity.status(404).body(error);
     }
 }

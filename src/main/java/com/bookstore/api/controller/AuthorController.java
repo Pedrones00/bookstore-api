@@ -62,6 +62,14 @@ public class AuthorController {
         return ResponseEntity.status(200).body(new AuthorResponseDTO(authorResponse));
     }
 
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<AuthorResponseDTO> activateAuthor(@PathVariable Long id){
+
+        Author author = this.authorService.activateAuthor(id);
+
+        return ResponseEntity.status(200).body(new AuthorResponseDTO(author));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
 
