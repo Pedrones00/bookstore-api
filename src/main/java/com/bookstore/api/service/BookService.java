@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.bookstore.api.dto.bookDTO.BookCreateDTO;
 import com.bookstore.api.dto.bookDTO.BookUpdateDTO;
+import com.bookstore.api.exception.authorException.AuthorAlreadyDeactivated;
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
+import com.bookstore.api.exception.bookException.BookAlreadyDeactivated;
 import com.bookstore.api.exception.bookException.BookNotFoundException;
 import com.bookstore.api.model.Author;
 import com.bookstore.api.model.Book;
 import com.bookstore.api.repository.AuthorRepository;
 import com.bookstore.api.repository.BookRepository;
+import com.bookstore.api.util.ActiveObjChecker;
 
 @Service
 public class BookService {
@@ -60,6 +63,7 @@ public class BookService {
                                 .stream()
                                 .map(author_id -> this.authorRepository.findById(author_id)
                                 .orElseThrow(() -> new AuthorNotFoundException(author_id)))
+                                .peek(author -> ActiveObjChecker.isActive(author.getActive(), new AuthorAlreadyDeactivated(author.getId())))
                                 .collect(Collectors.toSet());
         book.getAuthors().addAll(authors);
 
@@ -69,6 +73,7 @@ public class BookService {
     public Book updateBook(Long id, BookUpdateDTO bookData){
         Optional<Book> optionalBook = this.bookRepository.findById(id);
         Book book = optionalBook.orElseThrow(() -> new BookNotFoundException(id));
+        ActiveObjChecker.isActive(book.getActive(), new BookAlreadyDeactivated(id));
         
         if (bookData.title() != null) book.setTitle(bookData.title());
         if (bookData.isbn() != null) book.setIsbn(bookData.isbn());
@@ -80,6 +85,7 @@ public class BookService {
                                 .stream()
                                 .map(author_id -> this.authorRepository.findById(author_id)
                                 .orElseThrow(() -> new AuthorNotFoundException(author_id)))
+                                .peek(author -> ActiveObjChecker.isActive(author.getActive(), new AuthorAlreadyDeactivated(author.getId())))
                                 .collect(Collectors.toSet());
 
             book.getAuthors().clear();
@@ -92,6 +98,8 @@ public class BookService {
     public void deleteBook(Long id) {
         Optional<Book> optionalBook = this.bookRepository.findById(id);
         Book book = optionalBook.orElseThrow(() -> new BookNotFoundException(id));
+
+        ActiveObjChecker.isActive(book.getActive(), new BookAlreadyDeactivated(id));
 
         book.setActive(false);
 

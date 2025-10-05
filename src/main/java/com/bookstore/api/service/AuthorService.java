@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.bookstore.api.dto.authorDTO.AuthorCreateDTO;
 import com.bookstore.api.dto.authorDTO.AuthorUpdateDTO;
+import com.bookstore.api.exception.authorException.AuthorAlreadyDeactivated;
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
 import com.bookstore.api.model.Author;
 import com.bookstore.api.repository.AuthorRepository;
+import com.bookstore.api.util.ActiveObjChecker;
 
 @Service
 public class AuthorService {
@@ -62,6 +64,7 @@ public class AuthorService {
         Optional<Author> authorOptional = this.authorRepository.findById(id);
 
         Author author = authorOptional.orElseThrow(() -> new AuthorNotFoundException(id));
+        ActiveObjChecker.isActive(author.getActive(), new AuthorAlreadyDeactivated(id));
 
         if (authorData.name() != null) author.setName(authorData.name());
         if (authorData.birth_date() != null) author.setBirth_date(authorData.birth_date());
@@ -76,6 +79,7 @@ public class AuthorService {
         Optional<Author> authorOptional = this.authorRepository.findById(id);
 
         Author author = authorOptional.orElseThrow(() -> new AuthorNotFoundException(id));
+        ActiveObjChecker.isActive(author.getActive(), new AuthorAlreadyDeactivated(id));
 
         author.setActive(false);
         
