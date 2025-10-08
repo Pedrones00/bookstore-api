@@ -19,7 +19,9 @@ import com.bookstore.api.dto.authorDTO.AuthorCreateDTO;
 import com.bookstore.api.dto.authorDTO.AuthorResponseDTO;
 import com.bookstore.api.dto.authorDTO.AuthorResponseDeleteDTO;
 import com.bookstore.api.dto.authorDTO.AuthorUpdateDTO;
+import com.bookstore.api.dto.bookDTO.BookResponseDTO;
 import com.bookstore.api.model.Author;
+import com.bookstore.api.model.Book;
 import com.bookstore.api.service.AuthorService;
 
 import jakarta.validation.Valid;
@@ -46,6 +48,16 @@ public class AuthorController {
         Author author = this.authorService.getAuthorById(id);
 
         return ResponseEntity.status(200).body(new AuthorResponseDTO(author));
+    }
+
+    @GetMapping("/{id}/books")
+    public ResponseEntity<List<BookResponseDTO>> getBooksAuthorId(@PathVariable Long id){
+        
+        List<Book> books = this.authorService.getBooksAuthorId(id);
+
+        List<BookResponseDTO> response = books.stream().map(BookResponseDTO::new).toList();
+
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping

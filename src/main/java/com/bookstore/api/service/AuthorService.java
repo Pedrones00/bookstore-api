@@ -53,6 +53,16 @@ public class AuthorService {
 
     }
 
+    public List<Book> getBooksAuthorId(Long id) {
+        Optional<Author> authorOptional = this.authorRepository.findById(id);
+
+        Author author = authorOptional.orElseThrow(() -> new AuthorNotFoundException(id));
+
+        List<Book> books = author.getBooks().stream().collect(Collectors.toList());
+
+        return books;
+    }
+
     public Author registerAuthor(AuthorCreateDTO authorData){
 
         Author author = new Author();

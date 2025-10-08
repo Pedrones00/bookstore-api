@@ -51,6 +51,16 @@ public class BookService {
         return book;
     }
 
+    public List<Author> getAuthorsByBookId(Long id) {
+        Optional<Book> optionalBook = this.bookRepository.findById(id);
+        Book book = optionalBook.orElseThrow(() -> new BookNotFoundException(id));
+
+        List<Author> authors = book.getAuthors().stream().collect(Collectors.toList());
+
+        return authors;
+    }
+
+
 	public Book registerBook(BookCreateDTO bookData) {
 		Book book = new Book();
 

@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bookstore.api.dto.authorDTO.AuthorResponseDTO;
 import com.bookstore.api.dto.bookDTO.BookCreateDTO;
 import com.bookstore.api.dto.bookDTO.BookResponseDTO;
 import com.bookstore.api.dto.bookDTO.BookUpdateDTO;
+import com.bookstore.api.model.Author;
 import com.bookstore.api.model.Book;
 import com.bookstore.api.service.BookService;
 
@@ -44,6 +46,15 @@ public class BookController {
         Book book = this.bookService.getBookById(id);
 
         return ResponseEntity.status(200).body(new BookResponseDTO(book));
+    }
+
+    @GetMapping("/{id}/authors")
+    public ResponseEntity<List<AuthorResponseDTO>> getAuthorsByBookId(@PathVariable Long id){
+        List<Author> authors = this.bookService.getAuthorsByBookId(id);
+
+        List<AuthorResponseDTO> response = authors.stream().map(AuthorResponseDTO::new).toList();
+
+        return ResponseEntity.status(200).body(response);
     }
 
     @PostMapping
