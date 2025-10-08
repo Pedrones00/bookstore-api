@@ -11,6 +11,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.bookstore.api.exception.authorException.AuthorAlreadyActivated;
 import com.bookstore.api.exception.authorException.AuthorAlreadyDeactivated;
+import com.bookstore.api.exception.authorException.AuthorDeleteWithActiveLinkedBooks;
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
 import com.bookstore.api.exception.bookException.BookAlreadyActivated;
 import com.bookstore.api.exception.bookException.BookAlreadyDeactivated;
@@ -112,6 +113,18 @@ public class GlobalExceptionHandler {
 
         error.put("message", ex.getMessage());
         error.put("status", "404");
+        return ResponseEntity.status(404).body(error);
+    }
+
+    @ExceptionHandler(AuthorDeleteWithActiveLinkedBooks.class)
+    public ResponseEntity<Map<String, Object>> handlerAuthorDeleteBooks(AuthorDeleteWithActiveLinkedBooks ex){
+        
+        Map<String, Object> error = new HashMap<>();
+
+        error.put("message", "Author cannot be deleted because some books are still active");
+        error.put("linked_book", ex.getLinkedBooks());
+        error.put("status", "405");
+
         return ResponseEntity.status(404).body(error);
     }
 }

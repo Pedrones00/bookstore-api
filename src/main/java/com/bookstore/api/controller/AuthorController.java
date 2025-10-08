@@ -1,6 +1,7 @@
 package com.bookstore.api.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.api.dto.authorDTO.AuthorCreateDTO;
 import com.bookstore.api.dto.authorDTO.AuthorResponseDTO;
+import com.bookstore.api.dto.authorDTO.AuthorResponseDeleteDTO;
 import com.bookstore.api.dto.authorDTO.AuthorUpdateDTO;
 import com.bookstore.api.model.Author;
 import com.bookstore.api.service.AuthorService;
@@ -71,11 +73,11 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+    public ResponseEntity<AuthorResponseDeleteDTO> deleteAuthor(@PathVariable Long id, @RequestParam(required = false) Boolean force){
 
-        this.authorService.deleteAuthor(id);
+        Map<Long, String> linked_books = this.authorService.deleteAuthor(id, force); 
 
-        return ResponseEntity.status(204).build();
+        return ResponseEntity.status(200).body(new AuthorResponseDeleteDTO(id, linked_books));
     }
     
 }

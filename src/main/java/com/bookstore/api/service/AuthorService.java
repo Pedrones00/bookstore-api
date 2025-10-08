@@ -1,7 +1,9 @@
 package com.bookstore.api.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,10 +12,14 @@ import com.bookstore.api.dto.authorDTO.AuthorCreateDTO;
 import com.bookstore.api.dto.authorDTO.AuthorUpdateDTO;
 import com.bookstore.api.exception.authorException.AuthorAlreadyActivated;
 import com.bookstore.api.exception.authorException.AuthorAlreadyDeactivated;
+import com.bookstore.api.exception.authorException.AuthorDeleteWithActiveLinkedBooks;
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
 import com.bookstore.api.model.Author;
+import com.bookstore.api.model.Book;
 import com.bookstore.api.repository.AuthorRepository;
 import com.bookstore.api.util.ActiveObjChecker;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthorService {
@@ -86,19 +92,30 @@ public class AuthorService {
         return this.authorRepository.save(author);
     }
 
-
-    public void deleteAuthor(long id){
+    @Transactional
+    public Map<Long, String> deleteAuthor(long id, Boolean force){
 
         Optional<Author> authorOptional = this.authorRepository.findById(id);
 
         Author author = authorOptional.orElseThrow(() -> new AuthorNotFoundException(id));
         ActiveObjChecker.isActive(author.getActive(), new AuthorAlreadyDeactivated(id));
 
-        author.setActive(false);
-        
-        this.authorRepository.save(author);
+        Map<Long, String> linked_books = author.getBooks()
+        .stream().filter(Book::getActive).collect(Collectors.toMap(Book::getId, Book::getTitle));
 
-        return;
+        if (!linked_books.isEmpty()) {
+            if (!Boolean.TRUE.equals(force)) {
+                throw new AuthorDeleteWithActiveLinkedBooks(id, linked_books);
+            } else {
+                author.getBooks().stream().filter(Book::getActive).forEach(book -> {
+                    book.setActive(false);
+                });
+            }
+        }
+
+        author.setActive(false);
+
+        return linked_books;
     }
 
 }
