@@ -7,7 +7,7 @@ export const HomePage = () => {
     <>
       <Header></Header>
       <Container>
-        <div className="text-center my-5">
+        <div className="text-center">
           <h1 className="display-4">Bem-vindo à Livraria</h1>
           <p className="lead">Gerencie seu acervo de livros e autores</p>
         </div>

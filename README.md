@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+# Tech Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este Tech Challenge teve como objetivo desenvolver um sistema para gerenciamento de uma livraria. O foco do projeto é no front-end.
 
-## Available Scripts
+## Sumário
 
-In the project directory, you can run:
+- [Tech Challenge](#tech-challenge)
+  - [Sumário](#sumário)
+  - [Tecnologias utilizadas](#tecnologias-utilizadas)
+    - [Estrutura do repositório](#estrutura-do-repositório)
+  - [Modelos de dados](#modelos-de-dados)
+  - [Instalação e Configuração](#instalação-e-configuração)
+    - [Pré-requisitos](#pré-requisitos)
+    - [Como instalar](#como-instalar)
 
-### `npm start`
+## Tecnologias utilizadas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Para desenvolver esse sistema utilizamos as seguintes tecnologias:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- HTML
+- CSS
+- JavaScript
+- Bootstrap
+- React
+- NPM
 
-### `npm test`
+### Estrutura do repositório
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A organização do repositório refleta a arquitetura escolhida.
 
-### `npm run build`
+```text
+.
+├── public
+├── src
+│   ├── components # Componentes front-end
+│   ├── main
+│   │   ├── java
+│   │   │   └── com
+│   │   │       └── bookstore
+│   │   │           └── api
+│   │   │               └── model
+│   │   └── resources
+│   ├── pages # Páginas front-end
+│   │   ├── Authors
+│   │   ├── Books
+│   │   └── Home
+│   └── test
+│       └── java
+│           └── com
+│               └── bookstore
+│                   └── api
+└── target
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Modelos de dados
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```mermaid
+erDiagram
+    BOOKS 0--1+ BOOKS_AUTHORS
+    AUTHORS 0--1+ BOOKS_AUTHORS
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    BOOKS {
+        INT id PK
+        VARCHAR title
+        VARCHAR isbn
+        INT published_year
+        DECIMAL price
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
 
-### `npm run eject`
+    BOOKS_AUTHORS {
+        INT book_id FK
+        INT author_id FK
+    }
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    AUTHORS {
+        INT id PK
+        VARCHAR name
+        DATE birth_date
+        VARCHAR nationality
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Instalação e Configuração
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Pré-requisitos
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- [NodeJs](https://nodejs.org/en/download/)
+- [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
-## Learn More
+### Como instalar
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Instalar as dependências:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+    npm install
+```
 
-### Code Splitting
+2. Iniciar a aplicação:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+    npm run start
+```
