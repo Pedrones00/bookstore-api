@@ -1,4 +1,3 @@
-// pages/Authors/AuthorsPage.jsx
 import { Table, Button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Header } from "../../components/Header";
@@ -11,7 +10,7 @@ const AuthorsPage = () => {
       birth_date: "31/12/2000",
       nationality: "Brasileiro",
       created_at: "31/12/2023",
-      updated_at: "31/12/2004",
+      updated_at: "31/12/2024",
     },
     {
       id: 2,
@@ -19,7 +18,7 @@ const AuthorsPage = () => {
       birth_date: "31/12/2000",
       nationality: "Brasileiro",
       created_at: "31/12/2023",
-      updated_at: "31/12/2004",
+      updated_at: "31/12/2024",
     },
   ];
 
@@ -50,7 +49,7 @@ const AuthorsPage = () => {
                 <td>{author.created_at}</td>
                 <td>{author.updated_at}</td>
                 <td>
-                  <Link>
+                  <Link to={"/authors/edit"}>
                     <Button
                       title="Editar"
                       aria-label="Editar"

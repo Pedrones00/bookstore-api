@@ -1,4 +1,3 @@
-// pages/Authors/AuthorForm.jsx
 import { Form, Button, Card, Container } from "react-bootstrap";
 import { Header } from "../../components/Header";
 
@@ -24,7 +23,10 @@ const AuthorForm = () => {
 
               <Form.Group>
                 <Form.Label>Nacionalidade</Form.Label>
-                <Form.Select aria-label="Selecione a nacionalidade">
+                <Form.Select
+                  aria-label="Selecione a nacionalidade"
+                  defaultValue="brasileiro(a)"
+                >
                   <option value="afegã(o)">afegã(o)</option>
                   <option value="sul-africano(a)">sul-africano(a)</option>
                   <option value="albanês(esa)">albanês(esa)</option>

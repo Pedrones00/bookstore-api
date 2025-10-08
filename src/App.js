@@ -20,12 +20,12 @@ function App() {
         {/* Autores - CRUD */}
         <Route path="/authors" element={<AuthorsPage />} />
         <Route path="/authors/new" element={<AuthorForm />} />
-        <Route path="/authors/edit/:id" element={<AuthorForm />} />
+        <Route path="/authors/edit" element={<AuthorForm />} />
 
         {/* Livros - CRUD */}
         <Route path="/books" element={<BooksPage />} />
         <Route path="/books/new" element={<BookForm />} />
-        <Route path="/books/edit/:id" element={<BookForm />} />
+        <Route path="/books/edit" element={<BookForm />} />
       </Routes>
     </Router>
   );
