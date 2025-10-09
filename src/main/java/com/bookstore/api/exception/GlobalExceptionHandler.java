@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 
         error.put("message", "The requested endpoint does not exist");
         error.put("status", "404");
-        return ResponseEntity.status(404).body(error);
+        return ResponseEntity.status(405).body(error);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -82,8 +82,8 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
 
         error.put("message", ex.getMessage());
-        error.put("status", "405");
-        return ResponseEntity.status(405).body(error);
+        error.put("status", "412");
+        return ResponseEntity.status(412).body(error);
     }
 
     @ExceptionHandler(BookAlreadyDeactivated.class)
@@ -92,8 +92,8 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
 
         error.put("message", ex.getMessage());
-        error.put("status", "405");
-        return ResponseEntity.status(405).body(error);
+        error.put("status", "412");
+        return ResponseEntity.status(412).body(error);
     }
 
     @ExceptionHandler({AuthorAlreadyActivated.class})
@@ -102,8 +102,8 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
 
         error.put("message", ex.getMessage());
-        error.put("status", "404");
-        return ResponseEntity.status(404).body(error);
+        error.put("status", "412");
+        return ResponseEntity.status(412).body(error);
     }
 
     @ExceptionHandler({BookAlreadyActivated.class})
@@ -112,8 +112,8 @@ public class GlobalExceptionHandler {
         Map<String, String> error = new HashMap<>();
 
         error.put("message", ex.getMessage());
-        error.put("status", "404");
-        return ResponseEntity.status(404).body(error);
+        error.put("status", "412");
+        return ResponseEntity.status(412).body(error);
     }
 
     @ExceptionHandler(AuthorDeleteWithActiveLinkedBooks.class)
@@ -125,6 +125,6 @@ public class GlobalExceptionHandler {
         error.put("linked_book", ex.getLinkedBooks());
         error.put("status", "405");
 
-        return ResponseEntity.status(404).body(error);
+        return ResponseEntity.status(405).body(error);
     }
 }
