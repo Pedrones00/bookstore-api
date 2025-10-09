@@ -31,7 +31,7 @@ The main domain entities and their relationship (Mermaid ER diagram):
 ```mermaid
 erDiagram
   BOOK {
-    LONG id PK "Primary key"
+    LONG id
     VARCHAR title
     VARCHAR isbn
     INT published_year
@@ -43,7 +43,7 @@ erDiagram
   }
 
   AUTHOR {
-    LONG id PK "Primary key"
+    LONG id
     VARCHAR name
     DATE birth_date
     VARCHAR nationality
