@@ -56,8 +56,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(error);
     }
     
-    @ExceptionHandler({AuthorNotFoundException.class})
-    public ResponseEntity<Map<String, String>> handlerNotFound(AuthorNotFoundException ex){
+    @ExceptionHandler(AuthorNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlerAuthorNotFound(AuthorNotFoundException ex){
         
         Map<String, String> error = new HashMap<>();
 
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handlerNotFound(BookNotFoundException ex){
+    public ResponseEntity<Map<String, String>> handlerBookNotFound(BookNotFoundException ex){
         
         Map<String, String> error = new HashMap<>();
 
@@ -96,8 +96,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(412).body(error);
     }
 
-    @ExceptionHandler({AuthorAlreadyActivated.class})
-    public ResponseEntity<Map<String, String>> handlerNotFound(AuthorAlreadyActivated ex){
+    @ExceptionHandler(AuthorAlreadyActivated.class)
+    public ResponseEntity<Map<String, String>> handlerAuthorAlreadyActivated(AuthorAlreadyActivated ex){
         
         Map<String, String> error = new HashMap<>();
 
@@ -106,8 +106,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(412).body(error);
     }
 
-    @ExceptionHandler({BookAlreadyActivated.class})
-    public ResponseEntity<Map<String, String>> handlerNotFound(BookAlreadyActivated ex){
+    @ExceptionHandler(BookAlreadyActivated.class)
+    public ResponseEntity<Map<String, String>> handlerBookAlreadyActivated(BookAlreadyActivated ex){
         
         Map<String, String> error = new HashMap<>();
 
