@@ -15,6 +15,8 @@ import com.bookstore.api.exception.authorException.AuthorDeleteWithActiveLinkedB
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
 import com.bookstore.api.exception.bookException.BookAlreadyActivated;
 import com.bookstore.api.exception.bookException.BookAlreadyDeactivated;
+import com.bookstore.api.exception.bookException.BookCoverEmptyException;
+import com.bookstore.api.exception.bookException.BookCoverProcessingException;
 import com.bookstore.api.exception.bookException.BookNotFoundException;
 
 @RestControllerAdvice
@@ -126,5 +128,27 @@ public class GlobalExceptionHandler {
         error.put("status", "405");
 
         return ResponseEntity.status(405).body(error);
+    }
+
+    @ExceptionHandler(BookCoverProcessingException.class)
+    public ResponseEntity<Map<String, String>> handlerBookCoverRegister(BookCoverProcessingException ex){
+
+        Map<String, String> error = new HashMap<>();
+
+        error.put("error", ex.getMessage());
+        error.put("status", "500");
+
+        return ResponseEntity.status(500).body(error);
+    }
+
+    @ExceptionHandler(BookCoverEmptyException.class)
+    public ResponseEntity<Map<String, String>> handlerBookCoverEmpty(BookCoverEmptyException ex){
+
+        Map<String, String> error = new HashMap<>();
+
+        error.put("error", ex.getMessage());
+        error.put("status", "404");
+
+        return ResponseEntity.status(404).body(error);
     }
 }

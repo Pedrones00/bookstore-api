@@ -28,6 +28,13 @@ public class Book {
     private BigDecimal price;
     private int stock;
     private Boolean active;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] book_cover_file;
+
+    @Column(length = 20)
+    private String book_cover_file_type;
     
     @CreationTimestamp
     private LocalDateTime created_at;
@@ -96,6 +103,22 @@ public class Book {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public byte[] getBook_cover_file() {
+        return book_cover_file;
+    }
+
+    public void setBook_cover_file(byte[] book_cover_file) {
+        this.book_cover_file = book_cover_file;
+    }
+
+    public String getBook_cover_file_type() {
+        return book_cover_file_type;
+    }
+
+    public void setBook_cover_file_type(String book_cover_file_name) {
+        this.book_cover_file_type = book_cover_file_name;
     }
 
     public LocalDateTime getCreated_at() {

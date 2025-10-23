@@ -3,6 +3,7 @@ package com.bookstore.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bookstore.api.dto.authorDTO.AuthorResponseDTO;
+import com.bookstore.api.dto.bookDTO.BookCoverDTO;
 import com.bookstore.api.dto.bookDTO.BookCreateDTO;
 import com.bookstore.api.dto.bookDTO.BookResponseDTO;
 import com.bookstore.api.dto.bookDTO.BookUpdateDTO;
@@ -57,6 +60,15 @@ public class BookController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @GetMapping("/{id}/cover")
+    public ResponseEntity<byte[]> getBookCoverByBookId(@PathVariable Long id){
+        BookCoverDTO bookCover = this.bookService.getBookCoverByBookId(id);
+
+        return ResponseEntity.status(200)
+                .contentType(MediaType.parseMediaType(bookCover.fileType()))
+                .body(bookCover.binary());
+    }
+
     @PostMapping
     public ResponseEntity<BookResponseDTO> registerBook(@RequestBody @Valid BookCreateDTO bookRequest){
         Book book = this.bookService.registerBook(bookRequest);
@@ -78,9 +90,24 @@ public class BookController {
         return ResponseEntity.status(200).body(new BookResponseDTO(book));
     }
 
+    @PatchMapping("/{id}/cover")
+    public ResponseEntity<Void> updateBookCover(@PathVariable Long id, @RequestParam("file") MultipartFile file){
+        
+        this.bookService.updateBookCover(id, file);
+
+        return ResponseEntity.status(201).build();
+    } 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id){
         this.bookService.deleteBook(id);
+
+        return ResponseEntity.status(204).build();
+    }
+
+    @DeleteMapping("/{id}/cover")
+    public ResponseEntity<Void> deleteBookCover(@PathVariable Long id){
+        this.bookService.deleteBookCover(id);
 
         return ResponseEntity.status(204).build();
     }

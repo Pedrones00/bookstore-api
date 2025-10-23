@@ -1,5 +1,6 @@
 package com.bookstore.api.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -7,13 +8,17 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.bookstore.api.dto.bookDTO.BookCoverDTO;
 import com.bookstore.api.dto.bookDTO.BookCreateDTO;
 import com.bookstore.api.dto.bookDTO.BookUpdateDTO;
 import com.bookstore.api.exception.authorException.AuthorAlreadyDeactivated;
 import com.bookstore.api.exception.authorException.AuthorNotFoundException;
 import com.bookstore.api.exception.bookException.BookAlreadyActivated;
 import com.bookstore.api.exception.bookException.BookAlreadyDeactivated;
+import com.bookstore.api.exception.bookException.BookCoverEmptyException;
+import com.bookstore.api.exception.bookException.BookCoverProcessingException;
 import com.bookstore.api.exception.bookException.BookNotFoundException;
 import com.bookstore.api.model.Author;
 import com.bookstore.api.model.Book;
@@ -60,6 +65,13 @@ public class BookService {
         return authors;
     }
 
+    public BookCoverDTO getBookCoverByBookId(Long id) {
+        Optional<Book> optionalBook = this.bookRepository.findById(id);
+        Book book = optionalBook.orElseThrow(() -> new BookNotFoundException(id));
+        if (book.getBook_cover_file() == null) throw new BookCoverEmptyException();
+
+        return new BookCoverDTO(book);
+    }
 
 	public Book registerBook(BookCreateDTO bookData) {
 		Book book = new Book();
@@ -80,6 +92,22 @@ public class BookService {
 
         return this.bookRepository.save(book);
 	}
+
+    public void updateBookCover(Long id, MultipartFile file) {
+        Optional<Book> optionalBook = this.bookRepository.findById(id);
+        Book book = optionalBook.orElseThrow(() -> new BookNotFoundException(id));
+
+        try {
+            book.setBook_cover_file(file.getBytes());
+            book.setBook_cover_file_type(file.getContentType());
+
+            this.bookRepository.save(book); 
+        } catch (IOException e) {
+            throw new BookCoverProcessingException();
+        }
+        
+    }
+
 
     public Book updateBook(Long id, BookUpdateDTO bookData){
         Optional<Book> optionalBook = this.bookRepository.findById(id);
@@ -131,6 +159,16 @@ public class BookService {
         return;
     }
 
+    public void deleteBookCover(Long id) {
+        Optional<Book> optionalBook = this.bookRepository.findById(id);
+        Book book = optionalBook.orElseThrow(() -> new BookNotFoundException(id));
 
+        if(book.getBook_cover_file() == null && book.getBook_cover_file_type() == null) throw new BookCoverEmptyException();
+
+        book.setBook_cover_file(null);
+        book.setBook_cover_file_type(null);
+
+        this.bookRepository.save(book);
+    }
 
 }
