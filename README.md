@@ -38,6 +38,8 @@ erDiagram
     DECIMAL price
     INT stock
     BOOLEAN active
+    LOB book_cover_file
+    VARCHAR book_cover_file_type
     DATETIME created_at
     DATETIME updated_at
   }
@@ -49,11 +51,16 @@ erDiagram
     VARCHAR nationality
     BOOLEAN active
     DATETIME created_at
-    DATETIME update_at
+    DATETIME updated_at
   }
 
-  BOOK }o--o{ AUTHOR : "authors"
-  %% Join table (JPA @ManyToMany): book_authors(book_id, author_id)
+  BOOK_AUTHORS {
+    LONG book_id
+    LONG author_id
+  }
+
+  BOOK ||--o{ BOOK_AUTHORS : "id → book_id"
+  AUTHOR ||--o{ BOOK_AUTHORS : "id → author_id"
 ```
 
 ## Getting Started
@@ -131,18 +138,6 @@ Base paths:
   - Deactivate an author
   - Query param: `force` (optional). If the author has active linked books and `force` is not true, the request will fail with details of the linked books. If `force=true`, linked active books will be deactivated automatically before author deactivation.
 
-Response for DELETE (when returning linked books):
-
-```json
-{
-  "authorId": 1,
-  "booksIdTitle": {
-    "10": "Effective Java",
-    "11": "Spring in Action"
-  }
-}
-```
-
 ### Books endpoints
 
 - GET /books
@@ -154,6 +149,9 @@ Response for DELETE (when returning linked books):
 
 - GET /books/{id}/authors
   - Returns authors linked to a book
+
+- GET /books/{id}/cover
+  - Return the book cover as a binary file.
 
 - POST /books
   - Create a book
@@ -176,5 +174,11 @@ Response for DELETE (when returning linked books):
 - PATCH /books/{id}/activate
   - Activate a previously deactivated book (will verify linked authors are active)
 
+- PATCH /book/{id}/cover
+  - Update the book cover with the data sent in the request.
+
 - DELETE /books/{id}
   - Deactivate a book (soft delete). Returns 204 No Content on success.
+
+- DELETE /books/{id}/cover
+  - Delete the book cover file.
